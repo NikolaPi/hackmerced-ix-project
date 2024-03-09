@@ -2,12 +2,13 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const { v4: uuidv4 } = require('uuid');
 
-const db = new sqlite3.Database(':memory:');
+const port = 8000;
+const dbLocation = 'db/primary.sqlite'
+
+const db = new sqlite3.Database(dbLocation);
 const app = express();
 
 app.use(express.json())
-
-const port = 8000;
 
 //initialize database
 const initFood = "CREATE TABLE IF NOT EXISTS foods (uuid TEXT PRIMARY KEY, name TEXT, water_usage REAL, land_usage REAL, price REAL);";
@@ -52,9 +53,16 @@ app.post('/order', (req, res) => {
     timestamp = Math.floor(new Date().getTime() / 1000);
     orderStatement.run(orderId, orderData.food_uuid, orderData.price, orderData.quantity, timestamp, orderData.recv_time);
     console.log(timestamp);
-    res.send(orderId);
+    
+    resObj = {
+        'orderId': orderId,
+        'timestamp': timestamp 
+    };
+    res.send(resObj);
 });
 
 app.listen(port, () => {
     console.log(`Listening on ${port}`);
 });
+
+db.close();
