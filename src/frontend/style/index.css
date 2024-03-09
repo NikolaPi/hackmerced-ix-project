@@ -48,4 +48,15 @@ body {
 
     border-collapse: collapse;
     border: 1px solid #000000;
+
+    text-align: center;
+}
+
+#customer-table tr {
+    border-bottom: 1px solid #000000;
+}
+
+#customer-table td, #customer-table th {
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
 }

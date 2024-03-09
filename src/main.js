@@ -9,6 +9,7 @@ const db = new sqlite3.Database(dbLocation);
 const app = express();
 
 app.use(express.json())
+app.use(express.static('src/frontend'));
 
 //initialize database
 const initFood = "CREATE TABLE IF NOT EXISTS foods (uuid TEXT PRIMARY KEY, name TEXT, water_usage REAL, land_usage REAL, price REAL);";
@@ -25,14 +26,15 @@ app.get('/', (req, res) => {
 
 app.get('/listItems', (req, res) => {
     const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods;";
-    season = req.body.season.split('-')[0];
+    season = req.query.season.split('-')[0];
+    console.log("season debug");
+    console.log(req.query.season);
+    console.log(season);
     db.serialize(() => {
         db.all(listCommand, (err, row) => {
             outputObj = {};
 
             priceMultiplier = 1;
-            console.log("List data");
-            console.log(season);
 
             if(row === undefined) {
                 res.send('{}');
@@ -57,6 +59,7 @@ app.post('/order', (req, res) => {
 
     //TODO: add error handling / abstraction
     orderData = req.body;
+    console.log(orderData);
     season = orderData.season.split('-')[0];
     console.log(season);
 
