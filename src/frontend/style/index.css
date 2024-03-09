@@ -21,6 +21,8 @@ body {
 
     grid-row: 1;
     grid-column: 1;
+
+    background-color: #4c79ff;
 }
 
 #season-selector {
@@ -33,6 +35,7 @@ body {
     grid-column: 1;
 
     height: 100%;
+    background-color: #EEEEF0;
 }
 
 #logo-img {
@@ -52,6 +55,10 @@ body {
     text-align: center;
 }
 
+th, td {
+    padding: 8.3px;
+}
+
 #customer-table tr {
     border-bottom: 1px solid #000000;
 }
@@ -59,4 +66,8 @@ body {
 #customer-table td, #customer-table th {
     border-left: 1px solid #000000;
     border-right: 1px solid #000000;
+}
+
+button {
+    margin: 0px;
 }

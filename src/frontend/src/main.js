@@ -67,6 +67,9 @@ function buttonOrder(uuid) {
     foodName = appState.foodData[uuid].name;
     foodPrice = appState.foodData[uuid].price;
     buyQuantity = prompt(`you've indicated that you'd like to buy ${foodName}. How many lbs of them would you like to buy, at approximately $${foodPrice} per lb?`);
+    if(!buyQuantity) {
+        return;
+    }
     if(isNaN(buyQuantity)) {
         alert("We're sorry, we couldn't understand that. Please enter a positive integer next time.");
         return;
@@ -88,7 +91,7 @@ function updateTable(foodData) {
         tableRows[i].getElementsByClassName('food-name')[0].innerText = foodData[keys[i]].name;
         tableRows[i].getElementsByClassName('price')[0].innerText = foodData[keys[i]].price;
         tableRows[i].getElementsByClassName('water-eff')[0].innerText = foodData[keys[i]].water_usage;
-        tableRows[i].getElementsByClassName('land-eff')[0].innerText = foodData[keys[i]].land_usage;
+        tableRows[i].getElementsByClassName('land-eff')[0].innerText = Math.round(100000000000 / foodData[keys[i]].land_usage)/100;
         tableRows[i].getElementsByClassName('composite-eff')[0].innerText = foodData[keys[i]].water_usage + foodData[keys[i]].land_usage/1000;
         tableRows[i].getElementsByClassName('order')[0].getElementsByClassName('order-button')[0].setAttribute("onClick", `javascript: buttonOrder("${keys[i]}");`)
     }
