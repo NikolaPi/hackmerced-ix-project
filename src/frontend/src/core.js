@@ -134,8 +134,8 @@ function updateTable(foodData, isProducer = false) {
             tableRows[i].getElementsByClassName('food-name')[0].innerText = foodData[keys[i]].name;
             tableRows[i].getElementsByClassName('price')[0].innerText = Math.round(foodData[keys[i]].price*100)/100;
             tableRows[i].getElementsByClassName('water-eff')[0].innerText = Math.round(foodData[keys[i]].water_usage*100)/100;
-            tableRows[i].getElementsByClassName('land-eff')[0].innerText = Math.round(100000000000 / foodData[keys[i]].land_usage)/100;
-            tableRows[i].getElementsByClassName('composite-eff')[0].innerText = Math.round((foodData[keys[i]].water_usage + foodData[keys[i]].land_usage/ 1000)*100)/100;
+            tableRows[i].getElementsByClassName('land-eff')[0].innerText = Math.round(50000000000 / foodData[keys[i]].land_usage)/100;
+            tableRows[i].getElementsByClassName('composite-eff')[0].innerText = Math.round(Math.round(50000000000 / foodData[keys[i]].land_usage)/100 + Math.round(foodData[keys[i]].water_usage*100)/100);
             tableRows[i].getElementsByClassName('order')[0].getElementsByClassName('order-button')[0].setAttribute("onClick", `javascript: buttonOrder("${keys[i]}");`)
         } else {
             let quantity = appState.producerFoodData[keys[i]].quantity;
@@ -144,8 +144,8 @@ function updateTable(foodData, isProducer = false) {
             tableRows[i].getElementsByClassName('food-name')[0].innerText = foodData[keys[i]].name;
             tableRows[i].getElementsByClassName('value')[0].innerText = Math.round(foodData[keys[i]].price * 100)/100;
             tableRows[i].getElementsByClassName('water-eff')[0].innerText = Math.round(foodData[keys[i]].water_usage * quantity * 100)/100;
-            tableRows[i].getElementsByClassName('land-eff')[0].innerText = Math.round(100000000000 / foodData[keys[i]].land_usage * quantity) / 100;
-            tableRows[i].getElementsByClassName('composite-eff')[0].innerText = Math.round((foodData[keys[i]].water_usage + foodData[keys[i]].land_usage) * 1/10 * quantity);
+            tableRows[i].getElementsByClassName('land-eff')[0].innerText = Math.round(50000000000 / foodData[keys[i]].land_usage * quantity) / 100;
+            tableRows[i].getElementsByClassName('composite-eff')[0].innerText = Math.round(Math.round(50000000000 / foodData[keys[i]].land_usage * quantity) / 100 + Math.round(foodData[keys[i]].water_usage * quantity * 100)/100);
             tableRows[i].getElementsByClassName('ordered')[0].innerText = quantity;
         }
     }
