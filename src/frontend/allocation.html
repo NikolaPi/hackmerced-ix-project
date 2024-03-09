@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> CropTable - Producer View </title>
+        <link rel="stylesheet" href="style/index.css">
+    </head>
+
+    <body>
+        <div id="page-header">
+            <img id="logo-img" src="assets/image.png">
+            <select id="season-selector">
+                <option value="SPRING-2025">Spring 2025</option>
+                <option value="SUMMER-2025">Summer 2025</option>
+                <option value="FALL-2025">Fall 2025</option>
+                <option value="WINTER-2025">Winter 2025</option>
+                <option value="SPRING-2026">Spring 2026</option>
+                <option value="SUMMER-2026">Summer 2026</option>
+                <option value="FALL-2026">Fall 2026</option>
+                <option value="WINTER-2026">Winter 2026</option>
+            </select>
+        </div>
+        <div id="content-area">
+            <table id="customer-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Food</th>
+                        <th scope="col">Price (USD)</th>
+                        <th scope="col">Water Impact</th>
+                        <th scope="col">Land Impact</th>
+                        <th scope="col">Composite</th>
+                        <th scope="col">Order</th>
+                    </tr>
+                </thead>
+                <tbody id="customer-table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <script src="src/core.js"></script>
+        <script src="src/producer.js"></script>
+    </body>
+</html>

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title> CropTable </title>
+        <title> CropTable - Consumer View </title>
         <link rel="stylesheet" href="style/index.css">
     </head>
 
@@ -25,10 +25,10 @@
                 <thead>
                     <tr>
                         <th scope="col">Food</th>
-                        <th scope="col">Price (USD)</th>
                         <th scope="col">Water Impact</th>
                         <th scope="col">Land Impact</th>
                         <th scope="col">Composite</th>
+                        <th scope="col" id="price-header">Price (USD)</th>
                         <th scope="col">Order</th>
                     </tr>
                 </thead>
@@ -37,6 +37,7 @@
             </table>
         </div>
 
-        <script src="src/main.js"></script>
+        <script src="src/core.js"></script>
+        <script src="src/consumer.js"></script>
     </body>
 </html>
