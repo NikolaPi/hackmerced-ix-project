@@ -25,20 +25,26 @@ app.get('/', (req, res) => {
 
 app.get('/listItems', (req, res) => {
     const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods;";
-    listData = req.body.season;
+    season = req.body.season.split('-')[0];
     db.all(listCommand, (err, row) => {
         outputObj = {};
-        console.log(row);
 
-        switch(listData) {
+        priceMultiplier = 1;
+        console.log("List data");
+        console.log(season);
+        switch(season) {
             case "SPRING":
                 priceMultiplier = 0.8;
+                break;
             case "SUMMER":
                 priceMultiplier = 0.7;
+                break;
             case "FALL":
                 priceMultiplier = 1;
+                break;
             case "WINTER":
                 priceMultiplier = 1.3;
+                break;
         }
 
         if(row === undefined) {
@@ -49,7 +55,7 @@ app.get('/listItems', (req, res) => {
             newKey = row[i].uuid;
             delete row[i].uuid;
             outputObj[newKey] = row[i];
-            //outputObj[newKey].price = row[i].price * priceMultiplier;
+            outputObj[newKey].price = row[i].price * priceMultiplier;
         }
         console.log(outputObj);
         res.send(outputObj)
@@ -91,5 +97,3 @@ app.post('/order', (req, res) => {
 app.listen(port, () => {
     console.log(`Listening on ${port}`);
 });
-
-db.close();
