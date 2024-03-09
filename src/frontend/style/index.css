@@ -30,6 +30,11 @@ body {
     margin-right: 10px;
 }
 
+#mode-selector {
+    align-self: center;
+    padding: 10px;
+}
+
 #content-area {
     grid-row: 2;
     grid-column: 1;
@@ -57,6 +62,10 @@ body {
 
 th, td {
     padding: 8.3px;
+}
+
+th {
+    background-color: #cfcfcf;
 }
 
 #customer-table tr {

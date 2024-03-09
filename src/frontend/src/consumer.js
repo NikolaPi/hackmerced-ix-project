@@ -1,6 +1,6 @@
 appState.currentMode = false;
 
-getFoodData(appState.currentMode, appState.currentMode);
+getFoodData(document.getElementById('season-selector').value, appState.currentMode);
 document.getElementById('season-selector').onchange = () => {
     console.log("selection changed");
     getFoodData(document.getElementById('season-selector').value, appState.currentMode);
@@ -16,3 +16,5 @@ document.getElementById('mode-selector').onchange = () => {
         appState.currentMode = true;
     }
 }
+
+setInterval(function(){getFoodData(document.getElementById('season-selector').value, appState.currentMode);console.log('mode: ' + appState.currentMode)}, 2500);
