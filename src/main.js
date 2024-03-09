@@ -1,5 +1,6 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
+const { v4: uuidv4 } = require('uuid');
 
 const db = new sqlite3.Database(':memory:');
 const app = express();
@@ -10,7 +11,7 @@ const port = 8000;
 
 //initialize database
 const initFood = "CREATE TABLE IF NOT EXISTS foods (uuid TEXT PRIMARY KEY, name TEXT, water_usage REAL, land_usage REAL, price REAL);";
-const initOrders = "CREATE TABLE IF NOT EXISTS orders (uuid TEXT PRIMARY KEY, food_uuid TEXT, price REAL, quantity REAL, time_begin INTEGER, time_end INTEGER)"
+const initOrders = "CREATE TABLE IF NOT EXISTS orders (uuid TEXT PRIMARY KEY, food_uuid TEXT, price REAL, quantity REAL, time_submitted INTEGER, recv_time INTEGER)"
 const testData = "INSERT INTO foods VALUES ('212e6253-f88b-489d-a24b-aa5d33b2f825', 'testFood', 100, 150, 15);";
 const testData2 = "INSERT INTO foods VALUES ('932e6d53-fe8b-489d-a24b-aaed3eb7fd25', 'testFood2', 120.3, 23, 70);";
 
@@ -42,9 +43,16 @@ app.get('/listItems', (req, res) => {
 });
 
 app.post('/order', (req, res) => {
-    orderStatement = db.prepare("INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)");
-    console.log(req.body);
-    res.send('order placed');
+    const orderStatement = db.prepare("INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)");
+
+    //TODO: add error handling / abstraction
+    orderData = req.body;
+
+    orderId = uuidv4();
+    timestamp = Math.floor(new Date().getTime() / 1000);
+    orderStatement.run(orderId, orderData.food_uuid, orderData.price, orderData.quantity, timestamp, orderData.recv_time);
+    console.log(timestamp);
+    res.send(orderId);
 });
 
 app.listen(port, () => {
