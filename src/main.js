@@ -24,10 +24,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/listItems', (req, res) => {
-    const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods";
+    const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods;";
     listData = req.body.season;
     db.all(listCommand, (err, row) => {
         outputObj = {};
+        console.log(row);
 
         switch(listData) {
             case "SPRING":
