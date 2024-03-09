@@ -13,14 +13,10 @@ app.use(express.json())
 //initialize database
 const initFood = "CREATE TABLE IF NOT EXISTS foods (uuid TEXT PRIMARY KEY, name TEXT, water_usage REAL, land_usage REAL, price REAL);";
 const initOrders = "CREATE TABLE IF NOT EXISTS orders (uuid TEXT PRIMARY KEY, food_uuid TEXT, price REAL, quantity REAL, time_submitted INTEGER, recv_time TEXT)"
-const testData = "INSERT INTO foods VALUES ('212e6253-f88b-489d-a24b-aa5d33b2f825', 'testFood', 100, 150, 15);";
-const testData2 = "INSERT INTO foods VALUES ('932e6d53-fe8b-489d-a24b-aaed3eb7fd25', 'testFood2', 120.3, 23, 70);";
 
 db.serialize(() => {
     db.run(initFood);
     db.run(initOrders);
-    db.run(testData);
-    db.run(testData2);
 });
 
 app.get('/', (req, res) => {
@@ -29,20 +25,21 @@ app.get('/', (req, res) => {
 
 app.get('/listItems', (req, res) => {
     const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods";
-    //listData = req.body.season;
+    listData = req.body.season;
     db.all(listCommand, (err, row) => {
         outputObj = {};
 
-        // switch(listData) {
-        //     case "SPRING":
-        //         priceMultiplier = 0.8;
-        //     case "SUMMER":
-        //         priceMultiplier = 0.7;
-        //     case "FALL":
-        //         priceMultiplier = 1;
-        //     case "WINTER":
-        //         priceMultiplier = 1.3;
-        // }
+        switch(listData) {
+            case "SPRING":
+                priceMultiplier = 0.8;
+            case "SUMMER":
+                priceMultiplier = 0.7;
+            case "FALL":
+                priceMultiplier = 1;
+            case "WINTER":
+                priceMultiplier = 1.3;
+        }
+
         if(row === undefined) {
             res.send('{}');
             return;
