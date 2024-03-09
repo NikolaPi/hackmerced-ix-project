@@ -84,15 +84,24 @@ app.post('/order', (req, res) => {
 
 app.get('/orderStats', (req, res) => {
     //TODO: dashboard
-    const orderStatQuery = "SELECT food_uuid, SUM(quantity) AS quantity FROM orders GROUP BY food_uuid;"
-    db.all(orderStatQuery, (err, row) => {
-        let outputObj = {};
+    const orderStatQuery = db.prepare("SELECT food_uuid, SUM(quantity) AS quantity FROM orders WHERE recv_time = ? GROUP BY food_uuid;");
+    let recv_time = req.query.season;
+    console.log('recv_time');
+    console.log(req.query);
+    console.log(recv_time);
+    console.log('end');
+
+    db.serialize(() => {
+        orderStatQuery.all(recv_time, (err, row) => {
+            let outputObj = {};
+
         for(i = 0; i < row.length; i++) {
             let food_uuid = row[i].food_uuid;
             delete row[i].food_uuid;
             outputObj[food_uuid] = row[i];
         }
-        res.send(JSON.stringify(outputObj));
+        res.send(JSON.stringify(outputObj))
+        });
     });
 });
 
