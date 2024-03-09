@@ -26,72 +26,61 @@ app.get('/', (req, res) => {
 app.get('/listItems', (req, res) => {
     const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods;";
     season = req.body.season.split('-')[0];
-    db.all(listCommand, (err, row) => {
-        outputObj = {};
+    db.serialize(() => {
+        db.all(listCommand, (err, row) => {
+            outputObj = {};
 
-        priceMultiplier = 1;
-        console.log("List data");
-        console.log(season);
-        switch(season) {
-            case "SPRING":
-                priceMultiplier = 0.8;
-                break;
-            case "SUMMER":
-                priceMultiplier = 0.7;
-                break;
-            case "FALL":
-                priceMultiplier = 1;
-                break;
-            case "WINTER":
-                priceMultiplier = 1.3;
-                break;
-        }
+            priceMultiplier = 1;
+            console.log("List data");
+            console.log(season);
 
-        if(row === undefined) {
-            res.send('{}');
-            return;
-        }
-        for(i = 0; i < row.length; i++) {
-            newKey = row[i].uuid;
-            delete row[i].uuid;
-            outputObj[newKey] = row[i];
-            outputObj[newKey].price = row[i].price * priceMultiplier;
-        }
-        console.log(outputObj);
-        res.send(outputObj)
-    });
+            if(row === undefined) {
+                res.send('{}');
+                return;
+            }
+            for(i = 0; i < row.length; i++) {
+                newKey = row[i].uuid;
+                delete row[i].uuid;
+                outputObj[newKey] = row[i];
+                outputObj[newKey].price = row[i].price * priceMultiplier;
+            }
+            res.send(outputObj)
+        });
+    })
     //REQ: category
     //RETURN: Product UUID, Name, CurrentPrice, Water Score, Land Score, Composite Score
 });
 
 app.post('/order', (req, res) => {
-    const orderStatement = db.prepare("INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)");
+    const orderStatement = db.prepare("INSERT INTO orders VALUES (?, ?, (SELECT price FROM foods WHERE uuid = ?), ?, ?, ?)");
+    const getPricePaid = db.prepare("SELECT price FROM orders WHERE uuid = ?");
 
     //TODO: add error handling / abstraction
     orderData = req.body;
-    season = orderData.split('-')[0];
-    priceMultiplier = 1;
-    switch(season) {
-        case "SPRING":
-            priceMultiplier = 0.8;
-        case "SUMMER":
-            priceMultiplier = 0.7;
-        case "FALL":
-            priceMultiplier = 1;
-        case "WINTER":
-            priceMultiplier = 1.3;
-    }
+    season = orderData.season.split('-')[0];
+    console.log(season);
 
     orderId = uuidv4();
+    console.log(orderId);
     timestamp = Math.floor(new Date().getTime() / 1000);
-    orderStatement.run(orderId, orderData.food_uuid, orderData.price, orderData.quantity, timestamp, orderData.recv_time);
-    console.log(timestamp);
-    
-    resObj = {
-        'orderId': orderId,
-        'timestamp': timestamp 
-    };
-    res.send(resObj);
+    db.serialize(() => {
+        orderStatement.run(orderId, orderData.food_uuid, orderData.food_uuid, orderData.quantity, timestamp, orderData.season);
+        getPricePaid.get(orderId, (err, row) => {
+            resObj = {
+                'orderId': orderId,
+                'timestamp': timestamp,
+                'quantity': orderData.quantity,
+                //unit price NOT total price
+                'price': row.price
+            };
+
+            res.send(resObj);
+        });
+    });
+});
+
+app.get('/orderStats', (req, res) => {
+    //TODO: dashboard
 });
 
 app.listen(port, () => {
