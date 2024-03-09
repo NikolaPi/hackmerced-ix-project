@@ -2,7 +2,8 @@ var appState = {
     foodData: undefined,
     producerFoodData: undefined,
     tableSize: 0,
-    foodLock: true
+    foodLock: true,
+    currentMode: 'consumer'
 };
 
 function getFoodData(seasonString, isProducer = false) {
