@@ -1,6 +1,6 @@
 var appState = {
     foodData: undefined,
-    tableInitialized: false,
+    tableSize: 0,
     foodLock: true
 };
 
@@ -9,7 +9,8 @@ function getFoodData(seasonString) {
     httpReq.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
             newFoodData = JSON.parse(httpReq.responseText);
-            if(!appState.tableInitialized) {
+            if(appState.tableSize !== newFoodData.size) {
+                document.getElementById('customer-table-body').innerHTML = "";
                 createTable(Object.keys(newFoodData).length);
                 updateTable(newFoodData);
                 appState.foodData = newFoodData;
