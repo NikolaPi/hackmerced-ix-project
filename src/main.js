@@ -27,9 +27,6 @@ app.get('/', (req, res) => {
 app.get('/listItems', (req, res) => {
     const listCommand = "SELECT uuid, name, water_usage, land_usage, price FROM foods;";
     season = req.query.season.split('-')[0];
-    console.log("season debug");
-    console.log(req.query.season);
-    console.log(season);
     db.serialize(() => {
         db.all(listCommand, (err, row) => {
             outputObj = {};
@@ -86,10 +83,6 @@ app.get('/orderStats', (req, res) => {
     //TODO: dashboard
     const orderStatQuery = db.prepare("SELECT food_uuid, SUM(quantity) AS quantity FROM orders WHERE recv_time = ? GROUP BY food_uuid;");
     let recv_time = req.query.season;
-    console.log('recv_time');
-    console.log(req.query);
-    console.log(recv_time);
-    console.log('end');
 
     db.serialize(() => {
         orderStatQuery.all(recv_time, (err, row) => {
