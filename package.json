@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "reset": "rm db/primary.sqlite; cp db/foods.backup db/primary.sqlite",
+    "reset-windows": "del db/primary.sqlite; copy db/foods.backup db/primary.sqlite",
     "start": "node src/main.js"
   },
   "author": "",
