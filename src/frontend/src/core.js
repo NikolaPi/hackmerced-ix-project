@@ -56,7 +56,7 @@ function sendOrder(uuid, quantity) {
     httpReq.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             resObj = JSON.parse(httpReq.responseText);
-            alert(`You purchased ${quantity}lbs of ${appState.foodData[uuid].name} at ${appState.foodData[uuid].price}/lb for a total of ${appState.foodData[uuid].price * quantity}. Your order ID is ${resObj.orderId}`)
+            alert(`You purchased ${quantity}lbs of ${appState.foodData[uuid].name} at ${appState.foodData[uuid].price}/lb for a total of $${Math.round(appState.foodData[uuid].price * quantity * 100)/100}. Your order ID is ${resObj.orderId}`)
         }
     }
 
@@ -114,7 +114,7 @@ function buttonOrder(uuid) {
         return;
     }
 
-    confirmation = confirm(`You've requested ${buyQuantity} lbs of ${foodName} at $${foodPrice}/lb, estimated to cost $${buyQuantity * foodPrice}. Would you like to place this order?`);
+    confirmation = confirm(`You've requested ${buyQuantity} lbs of ${foodName} at $${foodPrice}/lb, estimated to cost $${Math.round(buyQuantity * foodPrice * 100)/100}. Would you like to place this order?`);
     if (confirmation) {
         sendOrder(uuid, buyQuantity);
     } else {
